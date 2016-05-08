@@ -37,7 +37,7 @@ public class AST {
     }
 
     public String getShortFilename() {
-        return version+filename.substring(filename.lastIndexOf("/") + 1);
+        return version+filename.substring(filename.lastIndexOf("/") + 1).replace(".java","");
     }
 
     public int getHash() {

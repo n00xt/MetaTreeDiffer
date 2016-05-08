@@ -23,17 +23,21 @@ public final class DistanceCalculator {
         List<AST> astList = ds.find(AST.class).field("FAMIXrtedTree").exists().asList();
         LinkedHashMap<ObjectId, Double> distances;
         String[] filenames = new String[astList.size()];
+//        String[] filenames1 = new String[astList.size()];
         double[][] distanceMatrix = new double[astList.size()][astList.size()];
+//        double[][] distanceMatrix1 = new double[astList.size()][astList.size()];
 
         for (int i = 0; i < astList.size(); i++) {
             distances = new LinkedHashMap<>();
             filenames[i] = astList.get(i).getId().toHexString();
+//            filenames1[i] = astList.get(i).getShortFilename();
             for (int j = 0; j < astList.size(); j++) {
                 LblTree lblTree1 = LblTree.fromString(astList.get(i).getFAMIXrtedTree());
                 LblTree lblTree2 = LblTree.fromString(astList.get(j).getFAMIXrtedTree());
                 double distance = new APTED(1,1,0).nonNormalizedTreeDist(lblTree1, lblTree2);
                 distances.put(astList.get(j).getId(), distance);
                 distanceMatrix[i][j] = distance;
+//                distanceMatrix1[i][j] = distance;
                 System.out.println(i+","+j+"\t"+distance);
             }
             final Query<AST> updateASTreeQuery = ds.createQuery(AST.class).field(Mapper.ID_KEY).equal(astList.get(i).getId());
@@ -44,6 +48,7 @@ public final class DistanceCalculator {
         System.out.println("\nRTED time: "+(time2 - time1)/1000.0);
 
         HClustering.clusterFiles(filenames, distanceMatrix);
+//        HClustering.clusterFiles1(filenames1, distanceMatrix1);
     }
 
 }

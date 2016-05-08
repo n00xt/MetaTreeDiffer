@@ -5,9 +5,6 @@ import models.AST;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
-/**
- * Created by karol on 18.04.16.
- */
 public enum MongoDB {
     INSTANCE;
     final private Morphia morphia = new Morphia();
@@ -24,7 +21,7 @@ public enum MongoDB {
         }
     }
 
-    private MongoClient getClient() {
+    public MongoClient getClient() {
         try{
             return new MongoClient("localhost", 27017);
         } catch (Exception e){
@@ -35,7 +32,7 @@ public enum MongoDB {
 
     public Datastore getDatastore(){
         Datastore ds;
-        ds = morphia.createDatastore(mongoClient, "metatreediffer2");
+        ds = morphia.createDatastore(mongoClient, "metadiff");
         morphia.map(AST.class);
         ds.ensureIndexes();
         return ds;

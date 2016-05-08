@@ -17,6 +17,7 @@ public final class ASTBuilder {
         ANTLRFileStream inputFile = null;
         try {
             inputFile = new ANTLRFileStream(ast.getFilename());
+//            System.out.println(ast.getFilename());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,6 +28,12 @@ public final class ASTBuilder {
         ParseTreeWalker walker = new ParseTreeWalker();
         Java8BaseListener listener = new Java8BaseListener();
         walker.walk(listener, tree);
+//        System.out.println(listener.getAst());
+//        System.out.println(listener.getTokens());
+//        System.out.println(listener.getFamix());
+//        System.out.println(listener.getFamixRted());
+//        System.out.println(listener.getRted());
+//        System.out.println("-------------------------------");
         return listener.getFamixRted();
     }
 
