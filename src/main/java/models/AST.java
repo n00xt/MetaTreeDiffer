@@ -12,6 +12,7 @@ public class AST {
     private ObjectId id;
     private String filename;
     private String shortFilename;
+    private String dbShortFile;
     private String RTEDTree;
     private String ASTree;
     private String TokensTree;
@@ -38,6 +39,14 @@ public class AST {
 
     public String getShortFilename() {
         return version+filename.substring(filename.lastIndexOf("/") + 1).replace(".java","");
+    }
+
+    public String getDbShortFile() {
+        return filename.substring(filename.lastIndexOf("/") + 1).replace(".java","");
+    }
+
+    public void setDbShortFile(String dbShortFile) {
+        this.dbShortFile = dbShortFile;
     }
 
     public int getHash() {

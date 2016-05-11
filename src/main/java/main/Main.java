@@ -1,10 +1,14 @@
 package main;
 
+import ch.usi.inf.sape.hac.agglomeration.CompleteLinkage;
+import ch.usi.inf.sape.hac.agglomeration.MedianLinkage;
+import ch.usi.inf.sape.hac.agglomeration.SingleLinkage;
 import ch.usi.inf.sape.hac.agglomeration.WardLinkage;
 import helpers.MongoDB;
 import models.AST;
 import org.mongodb.morphia.Datastore;
 import tools.ASTBuilder;
+import tools.DistanceCalculator;
 import tools.DistanceComputer;
 import java.io.File;
 import java.io.IOException;
@@ -21,20 +25,21 @@ public class Main {
     public String outputfile;
 
     public static void main(String[] args) {
-        if (args.length!=2){
-            System.out.println("Bad inputs!");
-            System.exit(1);
-        }
-        outputFile = args[1];
-        time1 = new Date().getTime();
-        List<AST> astFileList;
-        try {
-            astFileList = new ArrayList<>();
-            listFiles(args[0], astFileList);
-            saveFilesToDB(astFileList);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new DistanceComputer(new WardLinkage());
+//        if (args.length!=2){
+//            System.out.println("Bad inputs!");
+//            System.exit(1);
+//        }
+//        outputFile = args[1];
+//        time1 = new Date().getTime();
+//        List<AST> astFileList;
+//        try {
+//            astFileList = new ArrayList<>();
+//            listFiles(args[0], astFileList);
+//            saveFilesToDB(astFileList);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static void listFiles(String directoryName, List<AST> astFileList) throws IOException {
@@ -62,16 +67,16 @@ public class Main {
                 if (ds.find(AST.class, "filename", astFileList.get(i).getFilename()).get().getHash() != astFileList.get(i).getHash()){
                     astFileList.get(i).setVersion(++version);
                     astFileList.get(i).setFAMIXrtedTree(ASTBuilder.serializeAST(astFileList.get(i)));
-                    astFileList.get(i).setShortFilename(astFileList.get(i).getShortFilename());
+                    astFileList.get(i).setShortFilename(astFileList.get(i).getDbShortFile());
                     ds.save(astFileList.get(i));
 //                    System.out.println(noOfFiles-- +"\t"+astFileList.get(i).getFilename());
                     calculate = true;
                 }
             } else {
                 astFileList.get(i).setFAMIXrtedTree(ASTBuilder.serializeAST(astFileList.get(i)));
-                astFileList.get(i).setShortFilename(astFileList.get(i).getShortFilename());
+                astFileList.get(i).setShortFilename(astFileList.get(i).getDbShortFile());
                 ds.save(astFileList.get(i));
-                System.out.println(noOfFiles-- +"\t"+astFileList.get(i).getShortFilename());
+                System.out.println(noOfFiles-- +"\t"+astFileList.get(i).getDbShortFile());
                 calculate = true;
             }
         }

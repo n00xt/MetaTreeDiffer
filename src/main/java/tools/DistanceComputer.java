@@ -52,7 +52,7 @@ public class DistanceComputer {
                 final UpdateOperations updateAST = ds.createUpdateOperations(AST.class).set("clusterId", i);
                 final UpdateResults results = ds.updateFirst(setClusterQuery, updateAST);
             } else if (node instanceof MergeNode) {
-                if (((MergeNode) node).getDissimilarity() < 5) {
+                if (((MergeNode) node).getDissimilarity() < 2) {
                     saveClusters(((MergeNode) node).getLeft());
                     saveClusters(((MergeNode) node).getRight());
                 } else {
