@@ -32,7 +32,7 @@ public enum MongoDB {
 
     public Datastore getDatastore(){
         Datastore ds;
-        ds = morphia.createDatastore(mongoClient, "metadiff");
+        ds = morphia.createDatastore(mongoClient, "metatreediff");
         morphia.map(AST.class);
         ds.ensureIndexes();
         return ds;

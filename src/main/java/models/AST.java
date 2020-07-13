@@ -4,7 +4,14 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 @Entity(value = "ast", noClassnameStored = true)
 public class AST {
@@ -19,34 +26,52 @@ public class AST {
     private String FAMIXTree;
     private String FAMIXrtedTree;
     private LinkedHashMap<ObjectId, Double> distance;
+    private double[] dist;
     private Integer clusterId;
     private Integer version;
     private int hash;
+    private List<AST> listOfFiles;
+    private String directory;
 
     public AST() {
-    }
-
-    public AST(String filename) {
-        this.filename = filename;
-        this.version = 0;
     }
 
     public AST(String filename, int hash) {
         this.filename = filename;
         this.hash = hash;
         this.version = 0;
+        setDbShortFile();
+        setShortFilename();
+    }
+
+    public double[] getDist() {
+        return dist;
+    }
+
+    public void setDist(double[] dist) {
+        this.dist = dist;
     }
 
     public String getShortFilename() {
-        return version+filename.substring(filename.lastIndexOf("/") + 1).replace(".java","");
+        if (shortFilename.isEmpty() || shortFilename == null){
+            setShortFilename();
+            return shortFilename;
+        } else {
+            return shortFilename;
+        }
     }
 
     public String getDbShortFile() {
-        return filename.substring(filename.lastIndexOf("/") + 1).replace(".java","");
+        if (dbShortFile.isEmpty() || dbShortFile == null){
+            setDbShortFile();
+            return dbShortFile;
+        } else {
+            return dbShortFile;
+        }
     }
 
-    public void setDbShortFile(String dbShortFile) {
-        this.dbShortFile = dbShortFile;
+    public void setDbShortFile() {
+        this.dbShortFile = this.filename.substring(this.filename.lastIndexOf("/") + 1).replace(".java","");
     }
 
     public int getHash() {
@@ -57,8 +82,8 @@ public class AST {
         this.hash = hash;
     }
 
-    public void setShortFilename(String shortFilename) {
-        this.shortFilename = shortFilename;
+    public void setShortFilename() {
+        this.shortFilename = this.version+this.filename.substring(this.filename.lastIndexOf("/") + 1).replace(".java","");
     }
 
     public ObjectId getId() {
@@ -140,4 +165,5 @@ public class AST {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
 }
